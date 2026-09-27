@@ -1,0 +1,24 @@
+{
+  "name": "fork-theme",
+  "displayName": "Cursor Dark",
+  "description": "Bundled Cursor Dark color theme for this fork.",
+  "categories": [
+    "Themes"
+  ],
+  "version": "1.0.0",
+  "publisher": "fork",
+  "license": "MIT",
+  "engines": {
+    "vscode": "*"
+  },
+  "contributes": {
+    "themes": [
+      {
+        "id": "Cursor Dark",
+        "label": "Cursor Dark",
+        "uiTheme": "vs-dark",
+        "path": "./themes/cursor-dark.json"
+      }
+    ]
+  }
+}
