@@ -1,0 +1,149 @@
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+/*
+ * Fork presentation tweaks. Imported by forkDefaults.contribution.ts, which custom/trim.jsonc
+ * wires into workbench.common.main.ts.
+ *
+ * In dev every .css under out/vs is loaded regardless of reachability
+ * (src/vs/platform/cssDev/node/cssDevService.ts scans them), so this file applies there too;
+ * the import is what gets it into the production bundle.
+ */
+
+/*
+ * Composite tab labels in sentence case, not ALL-CAPS.
+ *
+ * `browser/parts/media/paneCompositePart.css` forces `text-transform: uppercase` on the
+ * composite bar action items, which is what renders the panel's tab row as
+ * PROBLEMS / OUTPUT / DEBUG CONSOLE / TERMINAL / PORTS (and the secondary side bar's tabs).
+ * Upstream's Modern UI Update replaces that casing in its "font ramp" module
+ * (contrib/modernUI/browser/media/fontRamp.css); this fork turns Modern UI off, so the
+ * override is repeated here.
+ *
+ * `none` rather than `capitalize`: the contributed strings are already cased the way they
+ * should read ("Terminal", "Debug Console"), and `none` leaves localized labels alone.
+ */
+.monaco-workbench .pane-composite-part > .title > .composite-bar-container > .composite-bar > .monaco-action-bar .action-item,
+.monaco-workbench .pane-composite-part > .header-or-footer > .composite-bar-container > .composite-bar > .monaco-action-bar .action-item,
+.monaco-workbench .pane-composite-part > .title > .composite-bar-container > .composite-bar > .monaco-action-bar .action-item .action-label,
+.monaco-workbench .pane-composite-part > .header-or-footer > .composite-bar-container > .composite-bar > .monaco-action-bar .action-item .action-label {
+	text-transform: none;
+}
+
+/*
+ * Center the primary side bar's horizontal Activity Bar items.
+ *
+ * With `workbench.activityBar.location: top` the primary side bar's activity items leave the
+ * dedicated vertical rail and render as a horizontal `.composite-bar` in a header area above
+ * the view title (CompositeBarPosition.TOP -> createHeaderArea, see paneCompositePart.ts).
+ * `.composite-bar-container` takes `flex: 1` (sidebarpart.css, paneCompositePart.css) while the
+ * action bar inside it is laid out from the start, so the row hugs the left edge. Centering
+ * the container makes the row read as one centered group - the horizontal analogue of the
+ * centered icon column in the default rail position.
+ *
+ * Scoped to the primary side bar on purpose: the secondary side bar is pinned to the default
+ * presentation (see auxiliaryBarPart.ts) and the panel keeps its items left-aligned next to
+ * its "Panel" label, so neither should be centered here.
+ */
+.monaco-workbench .part.sidebar.pane-composite-part > .title > .composite-bar-container,
+.monaco-workbench .part.sidebar.pane-composite-part > .header-or-footer > .composite-bar-container {
+	justify-content: center;
+}
+
+/*
+ * Mouse-focus rings off, globally.
+ *
+ * `browser/media/style.css` defines the workbench's global focus indication:
+ *
+ *   .monaco-workbench [tabindex="0"]:focus, .monaco-workbench [tabindex="-1"]:focus, ... {
+ *       outline-color: var(--vscode-focusBorder);
+ *   }
+ *
+ * Every focusable surface is such an element - pane composite parts (side bar, panel,
+ * auxiliary bar, status bar), lists and trees, menus, tool bar items - so a pointer click
+ * paints a 1px `focusBorder` ring around it.
+ *
+ * Upstream ships exactly the suppression below, but only inside the Modern UI Update module
+ * (contrib/modernUI/browser/media/keyboardFocusOnly.css) and scoped to the pane parts. This
+ * fork turns Modern UI off, so the same idea is applied here, globally.
+ *
+ * `:focus-visible` is what separates keyboard navigation (matches) from a pointer interaction
+ * (does not), so this removes the click rings and keeps the keyboard ones. To remove the
+ * keyboard rings too, add `--vscode-focusBorder` to the `workbench.colorCustomizations`
+ * overrides in forkDefaults.contribution.ts - see custom/README.md.
+ */
+.monaco-workbench :focus:not(:focus-visible) {
+	outline-color: transparent !important;
+}
+
+/*
+ * Lists and trees draw their own ring on the focused row while the list *container* holds
+ * focus - generated in base/browser/ui/list/listWidget.ts from the `list.focusOutline`,
+ * `list.focusAndSelectionOutline` and `list.selectionOutline` colors. When the list was
+ * focused with the pointer it matches `:focus` but not `:focus-visible`, so drop the row ring
+ * in that case. These selectors carry more specificity than the generated ones.
+ */
+.monaco-workbench .monaco-list:focus:not(:focus-visible) .monaco-list-row.focused,
+.monaco-workbench .monaco-list:focus:not(:focus-visible) .monaco-list-row.focused.selected {
+	outline: 0 !important;
+}
+
+/* =============================================================================
+ * Selected items: a rounded background block, no underline.
+ *
+ * Upstream marks the selected activity / tab item with a 1px border line painted by
+ * `.active-item-indicator:before`:
+ *
+ *   paneCompositePart.css   border-top    (header / title placement)
+ *                           border-bottom (footer placement)
+ *   sidebarpart.css         border-top-color:    var(--vscode-activityBarTop-activeBorder)
+ *   panelpart.css           border-top-color:    var(--vscode-panelTitle-activeBorder)
+ *   activityaction.css      border-left: 2px solid var(--vscode-activityBar-activeBorder)
+ *
+ * Those rules win on specificity (they add `.part.sidebar`, `.header`, `:not(:focus)` and so
+ * on), so rather than fight them the *source colors* are neutralized here. That is also the
+ * narrowest lever: each of these three tokens exists only for this indicator.
+ *
+ * `!important` is required. The theme service writes the tokens as inline styles on the
+ * workbench root, and an important author declaration outranks a normal inline one.
+ * ========================================================================== */
+
+.monaco-workbench {
+	--vscode-activityBar-activeBorder: transparent !important;
+	--vscode-activityBarTop-activeBorder: transparent !important;
+	--vscode-panelTitle-activeBorder: transparent !important;
+}
+
+/*
+ * The block. `activityBar.activeBackground` is the token the bundled Cursor Dark theme
+ * provides for exactly this (`#E4E4E40F`); upstream only reads it in the Agents window's
+ * project bar, so it is free to use here. The fallbacks cover themes that leave it unset.
+ */
+.monaco-workbench .pane-composite-part > :is(.title, .header-or-footer) > .composite-bar-container > .composite-bar > .monaco-action-bar .action-item.checked {
+	background-color: var(--vscode-activityBar-activeBackground, var(--vscode-activityBarTop-activeBackground, var(--vscode-toolbar-hoverBackground)));
+	border-radius: var(--vscode-cornerRadius-small, 4px);
+}
+
+/*
+ * The dedicated vertical rail (activityBar.location: default / bottom) marks the selected
+ * item with a 2px left border and no background at all. Give it the same block treatment so
+ * both placements read the same.
+ */
+.monaco-workbench .activitybar > .content :not(.monaco-menu) > .monaco-action-bar .action-item.checked {
+	background-color: var(--vscode-activityBar-activeBackground, var(--vscode-activityBarTop-activeBackground, var(--vscode-toolbar-hoverBackground)));
+	border-radius: var(--vscode-cornerRadius-small, 4px);
+}
+
+/*
+ * Keep the title bar's app icon vertically centered.
+ *
+ * `browser/parts/titlebar/media/titlebarpart.css` pins the codicon app icon's line height to
+ * the upstream title bar height (30px). This fork raises that height to 36 in
+ * `BrowserTitlebarPart.minimumHeight`, so the glyph has to move with it.
+ */
+.monaco-workbench .part.titlebar > .titlebar-container > .titlebar-left > .window-appicon.codicon {
+	line-height: 36px;
+}
+

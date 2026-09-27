@@ -140,10 +140,10 @@ import './contrib/extensions/electron-browser/devtoolsExtensionHost.contribution
 import './contrib/issue/electron-browser/issue.contribution.js';
 
 // Surveys
-import './contrib/surveys/browser/survey.contribution.js';
+// [trim] import './contrib/surveys/browser/survey.contribution.js';
 
 // Process Explorer
-import './contrib/processExplorer/electron-browser/processExplorer.contribution.js';
+// [trim] import './contrib/processExplorer/electron-browser/processExplorer.contribution.js';
 
 // Remote
 import './contrib/remote/electron-browser/remote.contribution.js';
@@ -176,7 +176,7 @@ import './contrib/webview/electron-browser/webview.contribution.js';
 import './contrib/browserView/electron-browser/browserView.contribution.js';
 
 // Splash
-import './contrib/splash/electron-browser/splash.contribution.js';
+// [trim] import './contrib/splash/electron-browser/splash.contribution.js';
 
 // Local History
 import './contrib/localHistory/electron-browser/localHistory.contribution.js';
@@ -192,16 +192,16 @@ import './contrib/remoteTunnel/electron-browser/remoteTunnel.contribution.js';
 
 // Chat
 import './contrib/chat/electron-browser/chat.contribution.js';
-import './contrib/chat/electron-browser/tunnelHost.contribution.js';
+// [trim] import './contrib/chat/electron-browser/tunnelHost.contribution.js';
 
 // Copilot Voice
-import './contrib/agentsVoice/electron-browser/agentsVoiceNativeCommands.js';
+// [trim] import './contrib/agentsVoice/electron-browser/agentsVoiceNativeCommands.js';
 
 // Encryption
 import './contrib/encryption/electron-browser/encryption.contribution.js';
 
 // Emergency Alert
-import './contrib/emergencyAlert/electron-browser/emergencyAlert.contribution.js';
+// [trim] import './contrib/emergencyAlert/electron-browser/emergencyAlert.contribution.js';
 
 // MCP
 import './contrib/mcp/electron-browser/mcp.contribution.js';

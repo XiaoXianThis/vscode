@@ -153,7 +153,7 @@ import './contrib/preferences/browser/keyboardLayoutPicker.js';
 import './contrib/debug/browser/extensionHostDebugService.js';
 
 // Welcome Banner
-import './contrib/welcomeBanner/browser/welcomeBanner.contribution.js';
+// [trim] import './contrib/welcomeBanner/browser/welcomeBanner.contribution.js';
 
 // Webview
 import './contrib/webview/browser/webview.web.contribution.js';
@@ -176,16 +176,16 @@ import './contrib/tags/browser/workspaceTagsService.js';
 import './contrib/issue/browser/issue.contribution.js';
 
 // Surveys
-import './contrib/surveys/browser/survey.contribution.js';
+// [trim] import './contrib/surveys/browser/survey.contribution.js';
 
 // Splash
-import './contrib/splash/browser/splash.contribution.js';
+// [trim] import './contrib/splash/browser/splash.contribution.js';
 
 // Remote Start Entry for the Web
 import './contrib/remote/browser/remoteStartEntry.contribution.js';
 
 // Process Explorer
-import './contrib/processExplorer/browser/processExplorer.web.contribution.js';
+// [trim] import './contrib/processExplorer/browser/processExplorer.web.contribution.js';
 
 // Browser View
 import './contrib/browserView/browser/browserView.contribution.js';

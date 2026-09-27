@@ -231,17 +231,17 @@ import './contrib/speech/browser/speech.contribution.js';
 import './contrib/chat/browser/chat.shared.contribution.js';
 import './contrib/chat/browser/chat.contribution.js';
 import './contrib/chat/browser/agentSessions/agentHost/agentHost.contribution.js';
-import './contrib/chat/browser/remoteAgentHost/remoteAgentHost.contribution.js';
-import './contrib/chat/browser/chat.view.contribution.js';
+// [trim] import './contrib/chat/browser/remoteAgentHost/remoteAgentHost.contribution.js';
+// [trim] import './contrib/chat/browser/chat.view.contribution.js';
 import './contrib/inlineChat/browser/inlineChat.contribution.js';
 
 // Copilot Voice
-import './contrib/agentsVoice/browser/agentsVoice.contribution.js';
+// [trim] import './contrib/agentsVoice/browser/agentsVoice.contribution.js';
 import './contrib/mcp/browser/mcp.contribution.js';
-import './contrib/mcp/browser/mcp.view.contribution.js';
+// [trim] import './contrib/mcp/browser/mcp.view.contribution.js';
 import './contrib/chat/browser/chatSessions/chatSessions.contribution.js';
-import './contrib/chat/browser/contextContrib/chatContext.contribution.js';
-import './contrib/imageCarousel/browser/imageCarousel.contribution.js';
+// [trim] import './contrib/chat/browser/contextContrib/chatContext.contribution.js';
+// [trim] import './contrib/imageCarousel/browser/imageCarousel.contribution.js';
 
 // Interactive
 import './contrib/interactive/browser/interactive.contribution.js';
@@ -301,7 +301,7 @@ import './contrib/debug/browser/debugViewlet.js';
 import './contrib/markers/browser/markers.contribution.js';
 
 // Process Explorer
-import './contrib/processExplorer/browser/processExplorer.contribution.js';
+// [trim] import './contrib/processExplorer/browser/processExplorer.contribution.js';
 
 // Merge Editor
 import './contrib/mergeEditor/browser/mergeEditor.contribution.js';
@@ -388,22 +388,22 @@ import './contrib/themes/browser/themes.contribution.js';
 import './contrib/update/browser/update.contribution.js';
 
 // Surveys
-import './contrib/surveys/browser/nps.contribution.js';
-import './contrib/surveys/browser/languageSurveys.contribution.js';
+// [trim] import './contrib/surveys/browser/nps.contribution.js';
+// [trim] import './contrib/surveys/browser/languageSurveys.contribution.js';
 
 // Welcome
-import './contrib/welcomeGettingStarted/browser/gettingStarted.contribution.js';
-import './contrib/welcomeAgentSessions/browser/agentSessionsWelcome.contribution.js';
-import './contrib/welcomeWalkthrough/browser/walkThrough.contribution.js';
-import './contrib/welcomeViews/common/viewsWelcome.contribution.js';
-import './contrib/welcomeViews/common/newFile.contribution.js';
+// [trim] import './contrib/welcomeGettingStarted/browser/gettingStarted.contribution.js';
+// [trim] import './contrib/welcomeAgentSessions/browser/agentSessionsWelcome.contribution.js';
+// [trim] import './contrib/welcomeWalkthrough/browser/walkThrough.contribution.js';
+// [trim] import './contrib/welcomeViews/common/viewsWelcome.contribution.js';
+// [trim] import './contrib/welcomeViews/common/newFile.contribution.js';
 
 // Welcome Onboarding
-import './contrib/welcomeOnboarding/browser/welcomeOnboarding.contribution.js';
+// [trim] import './contrib/welcomeOnboarding/browser/welcomeOnboarding.contribution.js';
 
 // Onboarding (scenario engine)
-import './contrib/onboarding/browser/onboarding.contribution.js';
-import './contrib/chat/browser/onboarding/modelPickerTryout.contribution.js';
+// [trim] import './contrib/onboarding/browser/onboarding.contribution.js';
+// [trim] import './contrib/chat/browser/onboarding/modelPickerTryout.contribution.js';
 import './contrib/codeEditor/browser/diffEditorTryout.contribution.js';
 
 // Call Hierarchy
@@ -435,7 +435,7 @@ import './contrib/userDataProfile/browser/userDataProfile.contribution.js';
 import './contrib/editSessions/browser/editSessions.contribution.js';
 
 // Remote Coding Agents
-import './contrib/remoteCodingAgents/browser/remoteCodingAgents.contribution.js';
+// [trim] import './contrib/remoteCodingAgents/browser/remoteCodingAgents.contribution.js';
 
 // Code Actions
 import './contrib/codeActions/browser/codeActions.contribution.js';
@@ -460,13 +460,13 @@ import './contrib/list/browser/list.contribution.js';
 import './contrib/accessibilitySignals/browser/accessibilitySignal.contribution.js';
 
 // Bracket Pair Colorizer 2 Telemetry
-import './contrib/bracketPairColorizer2Telemetry/browser/bracketPairColorizer2Telemetry.contribution.js';
+// [trim] import './contrib/bracketPairColorizer2Telemetry/browser/bracketPairColorizer2Telemetry.contribution.js';
 
 // Accessibility
 import './contrib/accessibility/browser/accessibility.contribution.js';
 
 // Metered Connection
-import './contrib/meteredConnection/browser/meteredConnection.contribution.js';
+// [trim] import './contrib/meteredConnection/browser/meteredConnection.contribution.js';
 
 // Share
 import './contrib/share/browser/share.contribution.js';
@@ -487,3 +487,6 @@ import './contrib/editTelemetry/browser/editTelemetry.contribution.js';
 import './contrib/opener/browser/opener.contribution.js';
 
 //#endregion
+
+// [trim-add] custom fork additions - maintained by custom/trim.jsonc
+import './forkDefaults.contribution.js';
