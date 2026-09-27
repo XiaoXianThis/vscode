@@ -134,7 +134,8 @@
 	// driver would regenerate.
 	"addLines": {
 		"src/vs/workbench/workbench.common.main.ts": [
-			"import './forkDefaults.contribution.js';"
+			"import './forkDefaults.contribution.js';",
+			"import './forkPlugins.contribution.js';"
 		]
 	},
 

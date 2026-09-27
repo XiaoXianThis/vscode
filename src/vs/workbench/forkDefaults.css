@@ -147,3 +147,19 @@
 	line-height: 36px;
 }
 
+/*
+ * Let a right panel plugin own its whole surface.
+ *
+ * The right panel is dedicated to one built-in chat plugin at a time
+ * (extensions/fork-plugins-host), and `AuxiliaryBarPart` already drops its own title row for
+ * that reason. What remains is the per-view header PaneView renders. `.pane` is a flex column
+ * and `.pane-body` is `flex: 1` (base/browser/ui/splitview/paneview.css), so removing the
+ * header hands its height to the body rather than leaving a gap.
+ *
+ * Scoped to the auxiliary bar: the side bar and panel keep their headers, where they carry
+ * collapse and view actions that are still wanted.
+ */
+.monaco-workbench .part.auxiliarybar .monaco-pane-view .pane > .pane-header {
+	display: none !important;
+}
+

@@ -101,7 +101,13 @@ export class AuxiliaryBarPart extends AbstractPaneCompositePart {
 		super(
 			Parts.AUXILIARYBAR_PART,
 			{
-				hasTitle: true,
+				// custom: this fork dedicates the right panel to one built-in chat plugin at a
+				// time (extensions/fork-plugins-host), and the plugin is meant to own the whole
+				// surface. Upstream reserves a 35px title row here for the view container
+				// switcher; `PartLayout.layout` only reserves it when `hasTitle` is true, so
+				// turning it off hands the space to the content. `createTitleArea` and
+				// `layoutEmptyMessage` already guard against the absent title.
+				hasTitle: false,
 				trailingSeparator: true,
 				borderWidth: () => (this.getColor(SIDE_BAR_BORDER) || this.getColor(contrastBorder)) ? 1 : 0,
 			},
@@ -281,6 +287,17 @@ export class AuxiliaryBarPart extends AbstractPaneCompositePart {
 	}
 
 	protected shouldShowCompositeBar(): boolean {
+		// custom: the fork gives this part no title row (`hasTitle: false` above), because the
+		// right panel is dedicated to one built-in chat plugin at a time and the plugin owns the
+		// whole surface. The container switcher lives in that row, so it has nowhere to go;
+		// switching happens from the title bar instead (forkPlugins.contribution.ts).
+		// `titleLabelElement` is only assigned when a title area exists, which makes it the
+		// reliable signal for this. The guards in `createTitleArea`, `layoutEmptyMessage` and
+		// `updateCompositeBar` all already handle an absent composite bar.
+		if (!this.titleLabelElement) {
+			return false;
+		}
+
 		if (this.configuration.position === ActivityBarPosition.HIDDEN) {
 			return false;
 		}

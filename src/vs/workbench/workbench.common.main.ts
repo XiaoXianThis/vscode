@@ -488,5 +488,7 @@ import './contrib/opener/browser/opener.contribution.js';
 
 //#endregion
 
-// [trim-add] custom fork additions - maintained by custom/trim.jsonc
 import './forkDefaults.contribution.js';
+
+// [trim-add] custom fork additions - maintained by custom/trim.jsonc
+import './forkPlugins.contribution.js';

@@ -94,5 +94,12 @@ Registry.as<IConfigurationRegistry>(Extensions.Configuration).registerDefaultCon
 		// Setting both the theme and the preferred dark theme covers `window.autoDetectColorScheme`.
 		'workbench.colorTheme': 'Cursor Dark',
 		'workbench.preferredDarkColorTheme': 'Cursor Dark',
+
+		// Show the secondary side bar (the right panel) when a workspace or window is opened for
+		// the first time, because that is where this fork's plugins live
+		// (extensions/fork-plugins-host). Upstream defaults to 'visibleInWorkspace' but skips the
+		// bar entirely when AI features are off - which is this fork's default - so without this
+		// the plugin panel would never appear on its own.
+		'workbench.secondarySideBar.defaultVisibility': 'visible',
 	},
 }]);
