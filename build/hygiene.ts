@@ -89,14 +89,12 @@ export function hygiene(some: NodeJS.ReadWriteStream | string[] | undefined, run
 	console.log(`Starting hygiene (${scope})...`);
 	let errorCount = 0;
 
+	// custom: upstream rejects any `extensionsGallery` in product.json here, because the
+	// open-source product.json must not ship a Marketplace - Microsoft injects its own at
+	// build time. This fork deliberately ships one (Open VSX, see product.json), so the guard
+	// is dropped. Keep in mind the field must stay pointed at a Marketplace whose terms
+	// license downstream products; the Microsoft Marketplace does not.
 	const productJson = es.through(function (file: VinylFile) {
-		const product = JSON.parse(file.contents!.toString('utf8'));
-
-		if (product.extensionsGallery) {
-			console.error(`product.json: Contains 'extensionsGallery'`);
-			errorCount++;
-		}
-
 		this.emit('data', file);
 	});
 
