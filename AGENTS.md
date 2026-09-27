@@ -42,8 +42,44 @@ one correct answer, so it cannot conflict.
 | Kind | Examples | How to change |
 | --- | --- | --- |
 | **Derived** (upstream-owned, regenerated) | `workbench.common.main.ts`, `workbench.desktop.main.ts`, `workbench.web.main.ts`, `build/next/index.ts`, `build/gulpfile.vscode.ts`, `AGENTS.md` | `custom/trim.jsonc` + `node custom/apply-trim.mjs` |
-| **Fork-owned** (new files, never conflict) | `custom/**`, `src/vs/workbench/forkDefaults.contribution.ts`, `src/vs/workbench/forkDefaults.css`, `extensions/fork-theme/**` | edit directly |
+| **Fork-owned** (new files, never conflict) | `custom/**`, `src/vs/workbench/forkDefaults.contribution.ts`, `src/vs/workbench/forkDefaults.css`, `src/vs/workbench/forkPlugins.contribution.ts`, `extensions/fork-theme/**`, `extensions/fork-plugins-host/**`, `extensions/fork-plugin-*/**` | edit directly |
 | **Hand-edited upstream** (small, marked `custom:`, reviewed each sync) | `product.json`, `package.json`, `build/npm/dirs.ts`, `build/lib/extensions.ts`, `build/hygiene.ts`, `browser/parts/globalCompositeBar.ts`, `browser/parts/auxiliarybar/auxiliaryBarPart.ts`, `browser/parts/titlebar/titlebarPart.ts` | edit directly, keep to one line |
+
+### Built-in plugins (`extensions/fork-plugin-*`)
+
+Plugins for this fork's right panel live as **one extension each**, named `fork-plugin-<id>`.
+`extensions/fork-plugins-host/` owns the shared Secondary Side Bar container (`forkPlugins`)
+and the selector setting (`fork.rightPanel.plugin`); each plugin contributes one webview view
+gated by `when: config.fork.rightPanel.plugin == '<id>'`. Full rationale and the add-a-plugin
+steps are in `extensions/fork-plugins-host/README.md`.
+
+The panel is dedicated to **one** plugin at a time and that plugin owns the whole surface, so
+two pieces of upstream chrome are removed for it:
+
+* `AuxiliaryBarPart` no longer takes a title row (`hasTitle: false`), and its
+  `shouldShowCompositeBar()` returns `false` while there is no title area. Without this,
+  `PartLayout.layout` reserves 35px for the container switcher that row holds.
+* `forkDefaults.css` hides the per-view header inside the auxiliary bar. `.pane` is a flex
+  column and `.pane-body` is `flex: 1`, so the body absorbs the header's height.
+
+Switching plugins is a **title bar** action, which is why it lives in workbench code
+(`src/vs/workbench/forkPlugins.contribution.ts`) rather than in an extension: `titleBar` is not
+among the menus the extension API exposes. It reads its candidate list from the setting's own
+`enum`, so the button and the Settings dropdown cannot drift apart.
+
+Two constraints from upstream that shape this and are easy to forget:
+
+* The built-in extension scanner reads only `stat.children` of `<repo>/extensions` - it does
+  **not** recurse. A plugin therefore has to be a direct child of `extensions/`; a shared
+  parent directory would not be scanned at all.
+* `viewsContainers` accepts only `id`, `title` and `icon` - there is **no `when`**, so a
+  contributed container cannot be hidden conditionally. Only a *view* can. That is why the
+  plugins share one container instead of each declaring its own.
+
+Plugins need no registration anywhere: no entry in `build/npm/dirs.ts`, none in the gulpfile
+compilation list, no `product.json` change. A plugin written in plain JavaScript with
+`"main": "./extension.js"` needs no build step either. Adding a plugin means adding one folder
+plus its id to the selector setting's `enum`.
 
 ### Marketplace (Open VSX)
 
