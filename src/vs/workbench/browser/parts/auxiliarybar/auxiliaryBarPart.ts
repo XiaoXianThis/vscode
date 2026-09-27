@@ -173,9 +173,17 @@ export class AuxiliaryBarPart extends AbstractPaneCompositePart {
 	}
 
 	private resolveConfiguration(): IAuxiliaryBarPartConfiguration {
-		const position = this.configurationService.getValue<ActivityBarPosition>(LayoutSettings.ACTIVITY_BAR_LOCATION);
-
-		const canShowLabels = position !== ActivityBarPosition.TOP && position !== ActivityBarPosition.BOTTOM; // use same style as activity bar in this case
+		// custom: this fork pins the secondary side bar to the default activity bar
+		// presentation. Upstream follows `workbench.activityBar.location` here, which would also
+		// move the secondary side bar's activity items to its top/bottom when the setting is
+		// `top`; the fork wants that only for the primary side bar.
+		//
+		// Pinning the position also makes the upstream `!== TOP && !== BOTTOM` check for
+		// `canShowLabels` provably false, so it is stated directly - keeping the comparison
+		// would be reported as TS2367 (comparison with no overlap), because a const narrows to
+		// its initializer's literal type even when annotated.
+		const position = ActivityBarPosition.DEFAULT;
+		const canShowLabels = true; // use same style as activity bar in this case
 		const showLabels = canShowLabels && this.configurationService.getValue('workbench.secondarySideBar.showLabels') !== false;
 
 		return { position, canShowLabels, showLabels };
