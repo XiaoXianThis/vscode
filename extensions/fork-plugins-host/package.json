@@ -1,0 +1,44 @@
+{
+  "name": "fork-plugins-host",
+  "publisher": "fork",
+  "displayName": "Fork Plugins",
+  "description": "Hosts this fork's built-in right panel plugins: the shared Secondary Side Bar container and the selector setting.",
+  "version": "1.0.0",
+  "engines": {
+    "vscode": "^1.140.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "contributes": {
+    "viewsContainers": {
+      "secondarySidebar": [
+        {
+          "id": "forkPlugins",
+          "title": "Chat",
+          "icon": "media/panel.svg"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Fork Plugins",
+      "properties": {
+        "fork.rightPanel.plugin": {
+          "type": "string",
+          "enum": [
+            "hello",
+            "clock",
+            "notes"
+          ],
+          "enumDescriptions": [
+            "A static webview. The smallest possible plugin.",
+            "The extension pushes the current time into the webview every second.",
+            "A text box whose contents survive reloads, through webview state."
+          ],
+          "default": "hello",
+          "markdownDescription": "Which built-in chat plugin fills the right panel.\n\nThe right panel is dedicated to exactly one of them at a time: each plugin contributes a webview view to the shared `forkPlugins` container, shown only while its id is selected here, and the panel's own title row and the view header are removed so the plugin owns the whole surface. Switch with the **Select Chat Plugin** button in the title bar.\n\nAdding a plugin means adding its id to this list; see `extensions/fork-plugins-host/README.md`."
+        }
+      }
+    }
+  }
+}

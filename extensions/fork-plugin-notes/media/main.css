@@ -1,0 +1,145 @@
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Fork contributors. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+/*
+ * Shared plugin surface.
+ *
+ * Every fork plugin repeats this block verbatim rather than importing it: plugins are
+ * separate extensions and cannot share source (see extensions/fork-plugins-host/README.md).
+ * Keep the copies identical, and put plugin-specific rules after the shared block so the
+ * next plugin can still copy the whole file.
+ *
+ * Rules this follows (see the repo's design philosophy skill):
+ *   - color, spacing and radius come from --vscode-* tokens, never literals
+ *   - padding/gap sit on the spacing ramp (2, 4, 6, 8, 10, 12, 16, 20, 24, ...)
+ *   - ordinary borders are one stroke (--vscode-strokeThickness)
+ *   - the body is a full-height flex column so a plugin fills the panel
+ */
+
+html,
+body {
+	height: 100%;
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	font-family: var(--vscode-font-family);
+	font-size: var(--vscode-font-size);
+	color: var(--vscode-foreground);
+	background-color: var(--vscode-sideBar-background);
+	overflow: hidden;
+}
+
+.plugin {
+	display: flex;
+	flex-direction: column;
+	box-sizing: border-box;
+	height: 100%;
+	padding: 16px;
+	gap: 8px;
+	overflow: auto;
+}
+
+.plugin-title {
+	margin: 0;
+	font-size: 1.1em;
+	font-weight: 600;
+}
+
+.plugin-lead {
+	margin: 0;
+	color: var(--vscode-descriptionForeground);
+	line-height: 1.5;
+}
+
+.plugin-list {
+	margin: 0;
+	padding-left: 20px;
+	line-height: 1.6;
+	color: var(--vscode-descriptionForeground);
+}
+
+.plugin-list code,
+.plugin-lead code {
+	font-family: var(--vscode-editor-font-family);
+	font-size: 0.95em;
+	color: var(--vscode-textPreformat-foreground);
+	background-color: var(--vscode-textPreformat-background);
+	border-radius: var(--vscode-cornerRadius-small, 4px);
+	padding: 0 4px;
+}
+
+.plugin-field {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+}
+
+.plugin-field > label {
+	font-weight: 600;
+}
+
+.plugin-input {
+	box-sizing: border-box;
+	width: 100%;
+	padding: 4px 6px;
+	font-family: inherit;
+	font-size: inherit;
+	color: var(--vscode-input-foreground);
+	background-color: var(--vscode-input-background);
+	border: var(--vscode-strokeThickness, 1px) solid var(--vscode-input-border, transparent);
+	border-radius: var(--vscode-cornerRadius-small, 4px);
+}
+
+.plugin-input:focus-visible {
+	outline: 1px solid var(--vscode-focusBorder);
+	outline-offset: -1px;
+}
+
+.plugin-textarea {
+	resize: none;
+	line-height: 1.5;
+}
+
+.plugin-readout {
+	display: flex;
+	align-items: baseline;
+	gap: 8px;
+}
+
+.plugin-clock {
+	font-family: var(--vscode-editor-font-family);
+	font-size: 2em;
+	font-variant-numeric: tabular-nums;
+	line-height: 1.2;
+}
+
+.plugin-hint {
+	margin: 0;
+	font-size: 0.9em;
+	color: var(--vscode-descriptionForeground);
+}
+
+.plugin-fill {
+	flex: 1;
+	min-height: 0;
+}
+
+.plugin-footer {
+	margin-top: auto;
+	padding-top: 8px;
+	border-top: var(--vscode-strokeThickness, 1px) solid var(--vscode-panel-border);
+	font-size: 0.9em;
+	color: var(--vscode-descriptionForeground);
+}
+
+/* --- end shared block ---------------------------------------------------------- */
+
+/* --- notes --------------------------------------------------------------------- */
+
+.plugin-field.plugin-fill > label {
+	flex-shrink: 0;
+}

@@ -1,0 +1,28 @@
+{
+  "name": "fork-plugin-clock",
+  "publisher": "fork",
+  "displayName": "Clock",
+  "description": "Fork plugin demo: the extension pushes the current time into the right panel every second.",
+  "version": "1.0.0",
+  "engines": {
+    "vscode": "^1.140.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "main": "./extension.js",
+  "activationEvents": [],
+  "contributes": {
+    "views": {
+      "forkPlugins": [
+        {
+          "id": "fork.plugin.clock",
+          "name": "Clock",
+          "icon": "media/icon.svg",
+          "type": "webview",
+          "when": "config.fork.rightPanel.plugin == 'clock'"
+        }
+      ]
+    }
+  }
+}

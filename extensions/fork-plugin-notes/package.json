@@ -1,0 +1,28 @@
+{
+  "name": "fork-plugin-notes",
+  "publisher": "fork",
+  "displayName": "Notes",
+  "description": "Fork plugin demo: webview -> extension messaging plus webview state that survives a reload.",
+  "version": "1.0.0",
+  "engines": {
+    "vscode": "^1.140.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "main": "./extension.js",
+  "activationEvents": [],
+  "contributes": {
+    "views": {
+      "forkPlugins": [
+        {
+          "id": "fork.plugin.notes",
+          "name": "Notes",
+          "icon": "media/icon.svg",
+          "type": "webview",
+          "when": "config.fork.rightPanel.plugin == 'notes'"
+        }
+      ]
+    }
+  }
+}
