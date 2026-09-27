@@ -1,0 +1,150 @@
+{
+	// ---------------------------------------------------------------------------------------
+	// custom/trim.jsonc
+	//
+	// The single source of truth for everything this fork removes from upstream VS Code.
+	//
+	// Nothing here is applied by hand: run `node custom/apply-trim.mjs` (or let the git merge
+	// driver in custom/merge-trim.mjs do it automatically) and the entries below are applied
+	// to whatever version of the file is currently checked out. See custom/README.md.
+	//
+	// Edit kinds
+	//   commentImports  comments out `import '<specifier>';` lines (aggregation entry files)
+	//   commentLines    comments out an exact line, all occurrences (array elements)
+	//   replacements    literal substring replacement (where commenting out is invalid)
+	//   addLines        appends our own code lines at the end of an upstream file
+	//   addBlocks       injects a document block read from custom/ into an upstream file
+	//
+	// Rules
+	//   - Only side-effect `import '...'` lines may be listed under commentImports. Those are
+	//     the lines that register a feature's contributions; removing them removes the feature
+	//     from the workbench without deleting any upstream file.
+	//   - Never list a line that other code imports a *value* from.
+	// ---------------------------------------------------------------------------------------
+
+	"commentImports": {
+		"src/vs/workbench/workbench.common.main.ts": [
+			// --- Welcome / onboarding surface ---------------------------------------------
+			"./contrib/welcomeGettingStarted/browser/gettingStarted.contribution.js",
+			"./contrib/welcomeAgentSessions/browser/agentSessionsWelcome.contribution.js",
+			"./contrib/welcomeWalkthrough/browser/walkThrough.contribution.js",
+			"./contrib/welcomeViews/common/viewsWelcome.contribution.js",
+			"./contrib/welcomeViews/common/newFile.contribution.js",
+			"./contrib/welcomeOnboarding/browser/welcomeOnboarding.contribution.js",
+			"./contrib/onboarding/browser/onboarding.contribution.js",
+
+			// --- Telemetry / survey / marketing surface -----------------------------------
+			"./contrib/surveys/browser/nps.contribution.js",
+			"./contrib/surveys/browser/languageSurveys.contribution.js",
+			"./contrib/bracketPairColorizer2Telemetry/browser/bracketPairColorizer2Telemetry.contribution.js",
+
+			// --- One-off non-core surface -------------------------------------------------
+			"./contrib/meteredConnection/browser/meteredConnection.contribution.js",
+			"./contrib/processExplorer/browser/processExplorer.contribution.js",
+
+			// --- Built-in AI: only the parts that are provably safe to drop ---------------
+			// A contribution module may only be listed here if NOTHING still reachable from
+			// the workbench entry injects a service it registers, and if no reachable file
+			// imports a *value* from it. `node custom/check-trim.mjs` enforces both.
+			//
+			// The built-in AI's remaining contributions are mixed: they register DI services
+			// (IChatService, IMcpService, IInlineChatSessionService, IAiEditTelemetryService,
+			// ...) *and* UI in the same file, and those services are injected by code we keep
+			// (tasks, notebook, scm, debug, search, codeEditor, extensions, testing, the
+			// extension-host bridges). Dropping them is Phase 2 - see custom/README.md.
+			//
+			// Reverted after the first launch failed with
+			//   "[createInstance] IChatService depends on IMcpService which is NOT registered."
+			// and 63 follow-on errors:
+			//   ./contrib/mcp/browser/mcp.contribution.js           (IMcpService, IMcpRegistry, ...)
+			//   ./contrib/mcp/electron-browser/mcp.contribution.js  (IWorkbenchMcpGatewayService, ...)
+			//   ./contrib/chat/browser/chat.contribution.js         (IChatResponseFileChangesService)
+			//   ./contrib/chat/browser/agentSessions/agentHost/agentHost.contribution.js
+			//   ./contrib/inlineChat/browser/inlineChat.contribution.js (IInlineChatSessionService -
+			//                                                       also injected by notebook cells)
+			//   ./contrib/editTelemetry/browser/editTelemetry.contribution.js
+			//   ./contrib/onboarding/electron-browser/onboardingTryout.contribution.js
+			//   ./contrib/chat/browser/chatSessions/chatSessions.contribution.js - ineffective,
+			//     mainThreadChatSessions.ts and chat.contribution.ts import values from it
+			"./contrib/chat/browser/chat.view.contribution.js",
+			"./contrib/chat/browser/contextContrib/chatContext.contribution.js",
+			"./contrib/chat/browser/remoteAgentHost/remoteAgentHost.contribution.js",
+			"./contrib/chat/browser/onboarding/modelPickerTryout.contribution.js",
+			"./contrib/agentsVoice/browser/agentsVoice.contribution.js",
+			"./contrib/mcp/browser/mcp.view.contribution.js",
+			"./contrib/imageCarousel/browser/imageCarousel.contribution.js",
+			"./contrib/remoteCodingAgents/browser/remoteCodingAgents.contribution.js"
+		],
+
+		"src/vs/workbench/workbench.desktop.main.ts": [
+			"./contrib/surveys/browser/survey.contribution.js",
+			"./contrib/splash/electron-browser/splash.contribution.js",
+			"./contrib/emergencyAlert/electron-browser/emergencyAlert.contribution.js",
+			"./contrib/processExplorer/electron-browser/processExplorer.contribution.js",
+
+			// --- Built-in AI: desktop contributions --------------------------------------
+			// Reverted, see the note in workbench.common.main.ts above:
+			//   ./contrib/chat/electron-browser/chat.contribution.js
+			//   ./contrib/mcp/electron-browser/mcp.contribution.js
+			//   ./contrib/onboarding/electron-browser/onboardingTryout.contribution.js
+			//     (IOnboardingTryoutHandoffService, injected by
+			//      platform/onboarding/common/onboardingTryoutHandoff.ts)
+			"./contrib/chat/electron-browser/tunnelHost.contribution.js",
+			"./contrib/agentsVoice/electron-browser/agentsVoiceNativeCommands.js"
+		],
+
+		"src/vs/workbench/workbench.web.main.ts": [
+			"./contrib/welcomeBanner/browser/welcomeBanner.contribution.js",
+			"./contrib/surveys/browser/survey.contribution.js",
+			"./contrib/splash/browser/splash.contribution.js",
+			"./contrib/processExplorer/browser/processExplorer.web.contribution.js"
+		]
+	},
+
+	"commentLines": {
+		// The Agents window (vs/sessions) is a second, AI-only workbench with its own Electron
+		// entry points. Dropping them from the build removes ~14.6 MB of source with no effect
+		// on the main workbench. `--agents` then simply has nothing to open; we never pass it.
+		// Both occurrences matter: each entry point is listed once in the entry point array and
+		// once in the CSS-bundling set.
+		"build/next/index.ts": [
+			"'vs/sessions/sessions.desktop.main',",
+			"'vs/sessions/electron-browser/sessions',"
+		],
+
+		// Built-in copilot is already excluded from local-extension packaging by name in
+		// build/lib/extensions.ts (`excludedExtensions`); this is what actually adds it back.
+		"build/gulpfile.vscode.ts": [
+			"compileCopilotExtensionBuildTask,"
+		]
+	},
+
+	"replacements": [
+		{
+			// Dropping the task usage above would otherwise leave an unused import, and both
+			// build/tsconfig.json and src/tsconfig.base.json set noUnusedLocals.
+			"file": "build/gulpfile.vscode.ts",
+			"find": "cleanExtensionsBuildTask, compileCopilotExtensionBuildTask }",
+			"replace": "cleanExtensionsBuildTask }"
+		}
+	],
+
+	// Our own lines, appended to an upstream entry file under a marker comment. This is how the
+	// fork registers workbench contributions of its own without hand-editing a file the merge
+	// driver would regenerate.
+	"addLines": {
+		"src/vs/workbench/workbench.common.main.ts": [
+			"import './forkDefaults.contribution.js';"
+		]
+	},
+
+	// A whole document block, read from a file under custom/ and injected between HTML-comment
+	// markers. AGENTS.md is upstream-owned but is the one file every agent session reads, so it
+	// has to carry the fork rules; deriving it here keeps it conflict-free and stops a direct
+	// edit from being silently clobbered by the merge driver.
+	"addBlocks": {
+		"AGENTS.md": [
+			"./agents-rules.md"
+		]
+	}
+}

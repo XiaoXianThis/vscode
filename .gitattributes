@@ -9,3 +9,19 @@ ThirdPartyNotices.txt eol=crlf
 *.sh eol=lf
 *.rtf -text
 **/*.json linguist-language=jsonc
+
+# --- custom fork: derived files -------------------------------------------------------
+# These files are regenerated from upstream's content by custom/apply-trim.mjs, so they
+# must never produce conflict markers. See custom/README.md and custom/setup.mjs.
+src/vs/workbench/workbench.common.main.ts merge=trim
+src/vs/workbench/workbench.desktop.main.ts merge=trim
+src/vs/workbench/workbench.web.main.ts merge=trim
+src/vs/workbench/workbench.web.main.internal.ts merge=trim
+src/vs/sessions/sessions.common.main.ts merge=trim
+src/vs/sessions/sessions.desktop.main.ts merge=trim
+src/vs/sessions/sessions.web.main.ts merge=trim
+src/vs/sessions/sessions.web.main.internal.ts merge=trim
+build/next/index.ts merge=trim
+build/gulpfile.vscode.ts merge=trim
+# Carries the fork rules in a generated block (see custom/agents-rules.md).
+AGENTS.md merge=trim

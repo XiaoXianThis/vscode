@@ -1,10 +1,3 @@
-# VS Code Agents Instructions
-
-This file provides instructions for AI coding agents working with the VS Code codebase.
-
-For detailed project overview, architecture, coding guidelines, and validation steps, see the [Copilot Instructions](.github/copilot-instructions.md).
-
-<!-- custom:begin agents-rules.md -->
 # Fork rules — read before changing anything
 
 This repo is a long-lived fork of `microsoft/vscode`. It is synced from upstream on a
@@ -140,4 +133,3 @@ whether upstream already has a switch:
   and re-run `node custom/apply-trim.mjs`.
 * Do not assume a trim worked because the file changed. Confirm with
   `node custom/check-trim.mjs` (it reports INEFFECTIVE trims).
-<!-- custom:end agents-rules.md -->
